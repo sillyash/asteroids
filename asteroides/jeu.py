@@ -1,7 +1,7 @@
 import pygame
 from utilitaires import charger_image,charger_son,afficher
 from elements import Asteroide,Vaisseau
-from random import randint
+from randome import randint
 
 class Jeu:
     #attributs de classe
