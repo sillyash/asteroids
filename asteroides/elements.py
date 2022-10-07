@@ -1,5 +1,5 @@
 import pygame
-from pygame.rath import Vector2
+from pygame.math import Vector2
 from pygame.transform import rotozoom
 
 class Animation:
