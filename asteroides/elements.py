@@ -105,8 +105,8 @@ class Missile(Animation):
     def __init__(self, image1, son, position: tuple, vitesse: tuple,direction, image2=None):
         super().__init__(image1, son, position, vitesse, image2)
         self.direction = direction
-        self.vitesse += 5
-        self.image1 = rotozoom(self.image1,acos(self.direction[0]))
+        self.vitesse += [5,5]
+        self.image1 = rotozoom(self.image1,acos(self.direction[0]),1)
     
     def deplacer(self):
         self.position += self.vitesse*self.direction

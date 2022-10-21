@@ -58,6 +58,8 @@ class Jeu:
                 self.vaisseau.accelerer()
             elif event.type == pygame.KEYUP and event.key == pygame.K_UP:
                 self.vaisseau.decelerer()
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                self.vaisseau.tirer(self.missile,self.son_missile)
 
         dict_touches_pressees = pygame.key.get_pressed()
         if dict_touches_pressees[pygame.K_RIGHT]:
@@ -94,6 +96,9 @@ class Jeu:
             self.vaisseau.dessiner(self.fenetre)
         for asteroide in self.asteroides:
             asteroide.dessiner(self.fenetre)
+        #on affiche les missiles
+        for missile in self.vaisseau.missile:
+            self.fenetre.blit(missile.image1,missile.position)
         #vitesse de rafraîchissement
         self.horloge.tick(60)
         pygame.display.update()
