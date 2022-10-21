@@ -17,9 +17,11 @@ class Jeu:
         self.vaisseau_on = charger_image('ship_on')
         self.asteroide = charger_image('asteroid')
         self.explosion = charger_image('explosion')
+        self.missile = charger_image('missile')
         #charger les sons
         self.son_explosion = charger_son("explosion.wav")
         self.son_acc = charger_son("acceleration.mp3")
+        self.son_missile = charger_son("son_missile.wav")
         #horloge pour le rafraîchissement de l'image
         self.horloge = pygame.time.Clock()
         #font
