@@ -52,10 +52,8 @@ class Vaisseau(Animation):
         self.delta_angle = 1
         self.taille_vaisseau = Vector2(90,90)
         self.score = 0
-        self.missile = []
-        
-    
-    
+        self.missile = []   
+      
     def accelerer(self):
         self.accelere = True
         self.vitesse += self.qte_acc*self.direction
@@ -106,10 +104,13 @@ class Missile(Animation):
         super().__init__(image1, son, position, vitesse, image2)
         self.direction = direction
         self.vitesse += [5,5]
-        self.image1 = rotozoom(self.image1,acos(self.direction[0]),1)
+        self.taille_missile = Vector2(20,20)
+        self.angle = self.direction.angle_to(Animation.EST)
+        self.image1 = image1
+        self.image1_rot = rotozoom(self.image1,self.angle,0.3)
+        self.position.x = (self.position.x+75) % #largeur (comment obtenir???)
+        self.position.y = (self.position.y+35) % #hauteur
+        print(self.position)
     
     def deplacer(self):
         self.position += self.vitesse*self.direction
-
-
-vecteur = Vector2(1,0)

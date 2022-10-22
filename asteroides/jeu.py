@@ -98,7 +98,7 @@ class Jeu:
             asteroide.dessiner(self.fenetre)
         #on affiche les missiles
         for missile in self.vaisseau.missile:
-            self.fenetre.blit(missile.image1,missile.position)
+            self.fenetre.blit(missile.image1_rot,missile.position)
         #vitesse de rafraîchissement
         self.horloge.tick(60)
         pygame.display.update()
