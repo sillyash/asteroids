@@ -49,7 +49,7 @@ class Vaisseau(Animation):
         self.accelere = False
         self.qte_acc = 2
         self.coeff_friction = 0.1
-        self.delta_angle = 1
+        self.delta_angle = 2.5
         self.taille_vaisseau = Vector2(90,90)
         self.score = 0
         self.missile = []   
@@ -107,10 +107,18 @@ class Missile(Animation):
         self.taille_missile = Vector2(20,20)
         self.angle = self.direction.angle_to(Animation.EST)
         self.image1 = image1
+        self.qte_acc = 2
         self.image1_rot = rotozoom(self.image1,self.angle,0.3)
-        self.position.x = (self.position.x+75) % #largeur (comment obtenir???)
-        self.position.y = (self.position.y+35) % #hauteur
-        print(self.position)
+        self.blit_position = self.position - Vector2(90,90)*0.5
     
-    def deplacer(self):
+    def deplacer(self,hauteur,largeur):
         self.position += self.vitesse*self.direction
+        self.position.x = self.position.x % largeur
+        self.position.y = self.position.y % hauteur
+        self.centre = self.position + Vector2(self.rayon)
+        self.rectangle = pygame.Rect(self.position.x,self.position.y,
+        self.rayon,self.rayon)
+
+    def dessiner(self,fenetre):
+        fenetre.blit(self.image1_rot,self.blit_position) 
+
