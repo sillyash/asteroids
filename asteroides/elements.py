@@ -94,8 +94,7 @@ class Asteroide(Animation):
 
     def exploser(self,fenetre,image):
         for i in range(24):
-            fenetre.blit(image,self.position,pygame.Rect(i*128,
-            0,128,128))
+            fenetre.blit(image,self.position,pygame.Rect(i*128,0,128,128))
         self.son.play()
 
 
