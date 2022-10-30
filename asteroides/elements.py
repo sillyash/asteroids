@@ -89,13 +89,25 @@ class Vaisseau(Animation):
 
 
 class Asteroide(Animation):
-    def __init__(self, image_asteroide,son_explosion,position,vitesse):
+    def __init__(self, image_asteroide,son_explosion,position,vitesse,taille):
         super().__init__(image_asteroide,son_explosion,position,vitesse)
+        self.taille = taille
 
     def exploser(self,fenetre,image):
         for i in range(24):
             fenetre.blit(image,self.position,pygame.Rect(i*128,0,128,128))
         self.son.play()
+
+    def scission(self):
+        if self.taille > 1:
+            self.taille -= 1
+            self.image1 = pygame.transform.scale(self.image1,(self.image1.get_width()/1.5,self.image1.get_width()/1.5))
+            self.rayon = self.image1.get_width()/2
+            self.rectangle = pygame.Rect(self.position.x,self.position.y,self.rayon,self.rayon)
+            self.centre = self.position + Vector2(self.rayon)
+            return True
+        else:
+            return False
 
 
 class Missile(Animation):
@@ -113,11 +125,11 @@ class Missile(Animation):
     def deplacer(self,hauteur,largeur):
         self.position += self.vitesse
         self.centre = self.position + Vector2(self.rayon)
-        self.rectangle = pygame.Rect(self.position.x,self.position.y,
-        self.rayon,self.rayon)
+        self.rectangle = pygame.Rect(self.position.x,self.position.y,self.rayon,self.rayon)
 
     def dessiner(self,fenetre):
         fenetre.blit(self.image1_rot,self.blit_position) 
 
     def sortir(self,hauteur,largeur):
         return (0 > self.position.x > largeur) or (0 > self.position.y > hauteur)
+

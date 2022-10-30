@@ -27,11 +27,8 @@ class Jeu:
         #font
         self.font = pygame.font.Font(None,64)
         #Liste d'astéroides
-        self.asteroides = [Asteroide(self.asteroide,self.son_explosion,
-        (randint(0,Jeu.LARGEUR//3),randint(0,Jeu.HAUTEUR//3)),(0.5,0.5)),
-         Asteroide(self.asteroide,self.son_explosion,
-        (randint(2*Jeu.LARGEUR//3,Jeu.LARGEUR),randint(2*Jeu.HAUTEUR//3,Jeu.HAUTEUR)),
-        (-0.5,-0.5))]
+        self.asteroides = [Asteroide(self.asteroide,self.son_explosion,(randint(0,Jeu.LARGEUR//3),randint(0,Jeu.HAUTEUR//3)),(0.5,0.5),3),
+         Asteroide(self.asteroide,self.son_explosion,(randint(2*Jeu.LARGEUR//3,Jeu.LARGEUR),randint(2*Jeu.HAUTEUR//3,Jeu.HAUTEUR)),(-0.5,-0.5),3)]
         #le vaisseau
         self.vaisseau =  Vaisseau(self.vaisseau_off,self.son_acc,
         (Jeu.LARGEUR//2,Jeu.HAUTEUR//2),self.vaisseau_on)
@@ -76,9 +73,11 @@ class Jeu:
         #collision vaisseau - asteroides
         if self.vaisseau.nb_vies > 0:
             for asteroide in self.asteroides:
-                if asteroide.\
-                entrer_en_collision_avec(self.vaisseau):
+                if asteroide.entrer_en_collision_avec(self.vaisseau):
                     self.vaisseau.nb_vies -= 1
+                    if not(asteroide.scission()):
+                        self.asteroides.remove(asteroide)
+                    #asteroide.exploser(self.fenetre)
                     afficher(self.fenetre,self.message,self.font)
                     break
 
@@ -93,9 +92,12 @@ class Jeu:
                 if asteroide.entrer_en_collision_avec(missile):
                     self.vaisseau.score += 1
                     self.vaisseau.missile.remove(missile)
-                    self.asteroides.remove(asteroide)
+                    if not(asteroide.scission()):
+                        self.asteroides.remove(asteroide)
+                    #asteroide.exploser(self.fenetre)
                     afficher(self.fenetre,self.message,self.font)
                     break
+
 
     def _dessiner(self):
         #effacer
