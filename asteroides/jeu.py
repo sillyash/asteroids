@@ -81,8 +81,21 @@ class Jeu:
                     self.vaisseau.nb_vies -= 1
                     afficher(self.fenetre,self.message,self.font)
                     break
-        #collission missile - asteroides
 
+        #collision missile - bord
+        for missile in self.vaisseau.missile:
+            if missile.sortir(Jeu.LARGEUR, Jeu.HAUTEUR):
+                self.vaisseau.missile.remove(missile)
+
+        #collission missile - asteroides
+        for missile in self.vaisseau.missile:
+            for asteroide in self.asteroides:
+                if asteroide.entrer_en_collision_avec(missile):
+                    self.vaisseau.score += 1
+                    self.vaisseau.missile.remove(missile)
+                    self.asteroides.remove(asteroide)
+                    afficher(self.fenetre,self.message,self.font)
+                    break
 
     def _dessiner(self):
         #effacer
@@ -99,6 +112,7 @@ class Jeu:
         #on affiche les missiles
         for missile in self.vaisseau.missile:
             self.fenetre.blit(missile.image1_rot,missile.position)
+            missile.deplacer(Jeu.LARGEUR,Jeu.HAUTEUR)
         #vitesse de rafraîchissement
         self.horloge.tick(60)
         pygame.display.update()

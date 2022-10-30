@@ -103,18 +103,16 @@ class Missile(Animation):
     def __init__(self, image1, son, position: tuple, vitesse: tuple,direction, image2=None):
         super().__init__(image1, son, position, vitesse, image2)
         self.direction = direction
-        self.vitesse += [5,5]
         self.taille_missile = Vector2(20,20)
         self.angle = self.direction.angle_to(Animation.EST)
+        self.vitesse += Vector2(self.direction)*3
         self.image1 = image1
         self.qte_acc = 2
         self.image1_rot = rotozoom(self.image1,self.angle,0.3)
         self.blit_position = self.position - Vector2(90,90)*0.5
     
     def deplacer(self,hauteur,largeur):
-        self.position += self.vitesse*self.direction
-        self.position.x = self.position.x % largeur
-        self.position.y = self.position.y % hauteur
+        self.position += self.vitesse
         self.centre = self.position + Vector2(self.rayon)
         self.rectangle = pygame.Rect(self.position.x,self.position.y,
         self.rayon,self.rayon)
@@ -122,3 +120,5 @@ class Missile(Animation):
     def dessiner(self,fenetre):
         fenetre.blit(self.image1_rot,self.blit_position) 
 
+    def sortir(self,hauteur,largeur):
+        return (0 > self.position.x > largeur) or (0 > self.position.y > hauteur)
