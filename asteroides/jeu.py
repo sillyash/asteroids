@@ -1,7 +1,7 @@
 import pygame
 from utilitaires import charger_image,charger_son,afficher
 from elements import Asteroide,Vaisseau
-from random import randint
+from random import *
 
 class Jeu:
     #attributs de classe
@@ -65,6 +65,10 @@ class Jeu:
             self.vaisseau.tourner(-1)
 
     def _mettre_a_jour(self):
+        #apparition d'astéroides
+        if len(self.asteroides) < 3:
+            self.asteroides.append(Asteroide(self.asteroide,self.son_explosion,(randint(0,Jeu.LARGEUR),0),(random(),random()),3))
+
         #déplacements
         self.vaisseau.deplacer(Jeu.LARGEUR,Jeu.HAUTEUR)
         for asteroide in self.asteroides:
@@ -95,7 +99,7 @@ class Jeu:
                     self.vaisseau.missile.remove(missile)
                     if not(asteroide.scission()):
                         self.asteroides.remove(asteroide)
-                    #asteroide.exploser(self.fenetre)
+                    #asteroide.exploser(self.fenetre,self.explosion)
                     afficher(self.fenetre,self.message,self.font)
                     break
 

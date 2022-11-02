@@ -107,7 +107,8 @@ class Asteroide(Animation):
             self.image1 = pygame.transform.scale(self.image1,(self.image1.get_width()/1.5,self.image1.get_width()/1.5))
             self.rayon = self.image1.get_width()/2
             self.rectangle = pygame.Rect(self.position.x,self.position.y,self.rayon,self.rayon)
-            self.centre = self.position + Vector2(self.rayon)
+            self.centre = self.position + Vector2(self.rayon) 
+            self.vitesse = tuple(1.8*i for i in self.vitesse)
             return True
         else:
             return False
