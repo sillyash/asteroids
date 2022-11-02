@@ -1,8 +1,8 @@
 import pygame
 from utilitaires import charger_image,charger_son,afficher
 from elements import Asteroide,Vaisseau
-from random import *
-
+from random import randint,random
+from time import sleep
 class Jeu:
     #attributs de classe
     LARGEUR = 800
@@ -33,8 +33,7 @@ class Jeu:
         self.vaisseau =  Vaisseau(self.vaisseau_off,self.son_acc,
         (Jeu.LARGEUR//2,Jeu.HAUTEUR//2),self.vaisseau_on)
         #message
-        self.message = "Nb vies:{}  Score:{}".format(self.vaisseau.nb_vies,
-        self.vaisseau.score)
+        self.message = "Nb vies:{}  Score:{}".format(self.vaisseau.nb_vies,self.vaisseau.score)
 
 
     def boucle_inf(self):
@@ -57,7 +56,8 @@ class Jeu:
                 self.vaisseau.decelerer()
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.vaisseau.tirer(self.missile,self.son_missile)
-
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                quit()
         dict_touches_pressees = pygame.key.get_pressed()
         if dict_touches_pressees[pygame.K_RIGHT]:
             self.vaisseau.tourner(1)
@@ -114,8 +114,7 @@ class Jeu:
         self.fenetre.blit(self.fonds_ecran, (0, 0))
         #redessiner
         self.message = "Nb vies:{}  Score:{}".\
-        format(self.vaisseau.nb_vies,
-        self.vaisseau.score)
+        format(self.vaisseau.nb_vies,self.vaisseau.score)
         afficher(self.fenetre,self.message,self.font)
         if self.vaisseau.nb_vies > 0:
             self.vaisseau.dessiner(self.fenetre)
