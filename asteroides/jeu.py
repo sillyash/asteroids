@@ -99,6 +99,11 @@ class Jeu:
                     self.vaisseau.missile.remove(missile)
                     if not(asteroide.scission()):
                         self.asteroides.remove(asteroide)
+                    else:
+                        self.asteroides.append(Asteroide(self.asteroide,self.son_explosion,asteroide.position,(random(),random()),3))
+                        self.asteroides[len(self.asteroides)-1].scission()
+                        if asteroide.taille == 1:
+                            self.asteroides[len(self.asteroides)-1].scission()
                     #asteroide.exploser(self.fenetre,self.explosion)
                     afficher(self.fenetre,self.message,self.font)
                     break
