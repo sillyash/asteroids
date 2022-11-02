@@ -83,8 +83,9 @@ class Jeu:
 
         #collision missile - bord
         for missile in self.vaisseau.missile:
-            if missile.sortir(Jeu.LARGEUR, Jeu.HAUTEUR):
+            if missile.sortir(Jeu.HAUTEUR, Jeu.LARGEUR):
                 self.vaisseau.missile.remove(missile)
+                break
 
         #collission missile - asteroides
         for missile in self.vaisseau.missile:

@@ -2,6 +2,7 @@ import pygame
 from pygame.math import Vector2
 from pygame.transform import rotozoom
 from math import acos
+import time
 
 class Animation:
     EST = Vector2(1,0)
@@ -52,7 +53,8 @@ class Vaisseau(Animation):
         self.delta_angle = 2.5
         self.taille_vaisseau = Vector2(90,90)
         self.score = 0
-        self.missile = []   
+        self.missile = []
+        self.Nb_missiles = 4   
       
     def accelerer(self):
         self.accelere = True
@@ -84,9 +86,10 @@ class Vaisseau(Animation):
         
     #on ajoute un missile dans la liste missile du vaisseau
     def tirer(self,image_missile,son_tir):
-        self.missile.append(Missile(image_missile,son_tir,self.position,self.vitesse,self.direction))
-        son_tir.play()
-
+        if len(self.missile) < self.Nb_missiles:
+            self.missile.append(Missile(image_missile,son_tir,self.position,self.vitesse,self.direction))
+            son_tir.play()
+        
 
 class Asteroide(Animation):
     def __init__(self, image_asteroide,son_explosion,position,vitesse,taille):
@@ -131,5 +134,6 @@ class Missile(Animation):
         fenetre.blit(self.image1_rot,self.blit_position) 
 
     def sortir(self,hauteur,largeur):
-        return (0 > self.position.x > largeur) or (0 > self.position.y > hauteur)
+        return (0 > self.position.x) or (0 > self.position.y) \
+        or (self.position.x > largeur) or (self.position.y > hauteur)
 
