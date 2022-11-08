@@ -1,7 +1,7 @@
 import pygame
 from pygame.math import Vector2
 from pygame.transform import rotozoom
-from math import acos
+from math import acos, atan2, degrees, pi
 import time
 
 class Animation:
@@ -138,3 +138,18 @@ class Missile(Animation):
         return (0 > self.position.x) or (0 > self.position.y) \
         or (self.position.x > largeur) or (self.position.y > hauteur)
 
+
+class Soucoupe(Animation):
+    def __init__(self, image_soucoupe,son_explosion,position,vitesse):
+        super().__init__(image_soucoupe,son_explosion,position,vitesse)
+        self.missile = []
+        self.direction = Vector2(1,0)
+
+    def chasser(self,other):
+        self.vitesse = (other.position-self.position)/80
+
+    def tirer_sur(self,image_missile,son_tir,position_cible):
+        self.angle_to_player = self.direction.angle_to(position_cible)
+        if len(self.missile) < 1:
+            self.missile.append(Missile(image_missile,son_tir,self.position,self.vitesse,self.direction))
+            son_tir.play()

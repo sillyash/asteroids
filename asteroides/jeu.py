@@ -1,6 +1,6 @@
 import pygame
 from utilitaires import charger_image,charger_son,afficher
-from elements import Asteroide,Vaisseau
+from elements import Asteroide,Vaisseau,Soucoupe
 from random import randint,random
 from time import sleep
 class Jeu:
@@ -18,6 +18,7 @@ class Jeu:
         self.asteroide = charger_image('asteroid')
         self.explosion = charger_image('explosion')
         self.missile = charger_image('missile')
+        self.soucoupe = charger_image('soucoupe1')
         #charger les sons
         self.son_explosion = charger_son("explosion.wav")
         self.son_acc = charger_son("acceleration.mp3")
@@ -27,14 +28,15 @@ class Jeu:
         #font
         self.font = pygame.font.Font(None,64)
         #Liste d'astéroides
-        self.asteroides = [Asteroide(self.asteroide,self.son_explosion,(randint(0,Jeu.LARGEUR//3),randint(0,Jeu.HAUTEUR//3)),(0.5,0.5),3),
-         Asteroide(self.asteroide,self.son_explosion,(randint(2*Jeu.LARGEUR//3,Jeu.LARGEUR),randint(2*Jeu.HAUTEUR//3,Jeu.HAUTEUR)),(-0.5,-0.5),3)]
+        self.asteroides = [Asteroide(self.asteroide,self.son_explosion,(randint(0,Jeu.LARGEUR//3),randint(0,Jeu.HAUTEUR//3)),(0.5,0.5),3),\
+        Asteroide(self.asteroide,self.son_explosion,(randint(2*Jeu.LARGEUR//3,Jeu.LARGEUR),randint(2*Jeu.HAUTEUR//3,Jeu.HAUTEUR)),(-0.5,-0.5),3)]
+        #soucoupes
+        self.soucoupes = [Soucoupe(self.soucoupe,self.son_explosion,(randint(0,Jeu.LARGEUR),randint(0,Jeu.HAUTEUR)),0)]
         #le vaisseau
-        self.vaisseau =  Vaisseau(self.vaisseau_off,self.son_acc,
-        (Jeu.LARGEUR//2,Jeu.HAUTEUR//2),self.vaisseau_on)
+        self.vaisseau =  Vaisseau(self.vaisseau_off,self.son_acc,(Jeu.LARGEUR//2,Jeu.HAUTEUR//2),self.vaisseau_on)
         #message
         self.message = "Nb vies:{}  Score:{}".format(self.vaisseau.nb_vies,self.vaisseau.score)
-
+        SOUTIR  = pygame.event.custom_type()
 
     def boucle_inf(self):
         while True:
@@ -48,7 +50,7 @@ class Jeu:
 
     def _capturer_evt(self):
         for event in pygame.event.get():
-            if event.type == pygame.QUIT :
+            if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 quit()
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
                 self.vaisseau.accelerer()
@@ -56,8 +58,6 @@ class Jeu:
                 self.vaisseau.decelerer()
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.vaisseau.tirer(self.missile,self.son_missile)
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                quit()
         dict_touches_pressees = pygame.key.get_pressed()
         if dict_touches_pressees[pygame.K_RIGHT]:
             self.vaisseau.tourner(1)
@@ -73,8 +73,12 @@ class Jeu:
         self.vaisseau.deplacer(Jeu.LARGEUR,Jeu.HAUTEUR)
         for asteroide in self.asteroides:
             asteroide.deplacer(Jeu.LARGEUR,Jeu.HAUTEUR)
-
-        #collision vaisseau - asteroides
+        for soucoupe in self.soucoupes:
+            soucoupe.chasser(self.vaisseau)
+            soucoupe.deplacer(Jeu.LARGEUR,Jeu.HAUTEUR)
+            soucoupe.tirer_sur(self.missile,self.son_missile,self.vaisseau.direction)
+            
+        #collision vaisseau - asteroides/soucoupe
         if self.vaisseau.nb_vies > 0:
             for asteroide in self.asteroides:
                 if asteroide.entrer_en_collision_avec(self.vaisseau):
@@ -84,14 +88,25 @@ class Jeu:
                     #asteroide.exploser(self.fenetre)
                     afficher(self.fenetre,self.message,self.font)
                     break
+            for soucoupe in self.soucoupes:
+                if soucoupe.entrer_en_collision_avec(self.vaisseau):
+                    self.vaisseau.nb_vies -= 1
+                    afficher(self.fenetre,self.message,self.font)
+                    self.soucoupes.remove(soucoupe)
+                    break
 
         #collision missile - bord
         for missile in self.vaisseau.missile:
             if missile.sortir(Jeu.HAUTEUR, Jeu.LARGEUR):
                 self.vaisseau.missile.remove(missile)
                 break
+        for soucoupe in self.soucoupes:
+            for missile in soucoupe.missile:
+                if missile.sortir(Jeu.HAUTEUR, Jeu.LARGEUR):
+                    soucoupe.missile.remove(missile)
+                    break
 
-        #collission missile - asteroides
+        #collission missile - asteroides/soucoupes
         for missile in self.vaisseau.missile:
             for asteroide in self.asteroides:
                 if asteroide.entrer_en_collision_avec(missile):
@@ -108,6 +123,14 @@ class Jeu:
                     afficher(self.fenetre,self.message,self.font)
                     break
 
+            for soucoupe in self.soucoupes:
+                if soucoupe.entrer_en_collision_avec(missile):
+                    self.vaisseau.score += 1
+                    self.vaisseau.missile.remove(missile)
+                    self.soucoupes.remove(soucoupe)
+                    afficher(self.fenetre,self.message,self.font)
+                
+
 
     def _dessiner(self):
         #effacer
@@ -116,14 +139,24 @@ class Jeu:
         self.message = "Nb vies:{}  Score:{}".\
         format(self.vaisseau.nb_vies,self.vaisseau.score)
         afficher(self.fenetre,self.message,self.font)
+
         if self.vaisseau.nb_vies > 0:
             self.vaisseau.dessiner(self.fenetre)
+            #on affiche les missiles
+            for missile in self.vaisseau.missile:
+                self.fenetre.blit(missile.image1_rot,missile.position)
+                missile.deplacer(Jeu.LARGEUR,Jeu.HAUTEUR)
+
         for asteroide in self.asteroides:
             asteroide.dessiner(self.fenetre)
-        #on affiche les missiles
-        for missile in self.vaisseau.missile:
-            self.fenetre.blit(missile.image1_rot,missile.position)
-            missile.deplacer(Jeu.LARGEUR,Jeu.HAUTEUR)
+
+        #on affiche les soucoupes
+        for soucoupe in self.soucoupes:
+            soucoupe.dessiner(self.fenetre)
+            for missile in soucoupe.missile:
+                self.fenetre.blit(missile.image1_rot,missile.position)
+                missile.deplacer(Jeu.LARGEUR,Jeu.HAUTEUR)
+
         #vitesse de rafraîchissement
         self.horloge.tick(60)
         pygame.display.update()
