@@ -45,6 +45,7 @@ class Vaisseau(Animation):
     def __init__(self,vaisseau_off,son_acc,position,vaisseau_on):
         super().__init__(vaisseau_off,son_acc,position,(0,0),vaisseau_on)
         #Nombre de vies
+        self.invincible = 60
         self.nb_vies = 5
         self.direction = Vector2(1,0)
         self.accelere = False
@@ -56,6 +57,9 @@ class Vaisseau(Animation):
         self.missile = []
         self.Nb_missiles = 4   
         self.Nb_missiles = 4
+
+    def invincible_blit(self):
+        pass
       
     def accelerer(self):
         self.accelere = True
@@ -121,7 +125,7 @@ class Missile(Animation):
         self.direction = direction
         self.taille_missile = Vector2(20,20)
         self.angle = self.direction.angle_to(Animation.EST)
-        self.vitesse += Vector2(self.direction)*3
+        self.vitesse = Vector2(self.direction)*7
         self.image1 = image1
         self.qte_acc = 2
         self.image1_rot = rotozoom(self.image1,self.angle,0.3)
@@ -148,6 +152,11 @@ class Soucoupe(Animation):
 
     def chasser(self,other):
         self.vitesse = (other.position-self.position)/80
+
+    """def est_trop_proche(self,other):
+        print(self.position.x - other.position.x)
+        print(self.position.y - other.position.y)
+        return (self.position.x - other.position.x) > 100 and (self.position.y - other.position.y) > 100"""
 
     def tirer_sur(self,image_missile,son_tir,position_cible):
         self.angle_to_player = self.direction.angle_to(position_cible)

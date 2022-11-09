@@ -68,6 +68,10 @@ class Jeu:
         #apparition d'astéroides
         if len(self.asteroides) < 3:
             self.asteroides.append(Asteroide(self.asteroide,self.son_explosion,(randint(0,Jeu.LARGEUR),0),(random(),random()),3))
+        
+        #invincibilité
+        if self.vaisseau.invincible > 0:
+            self.vaisseau.invincible -= 1
 
         #déplacements
         self.vaisseau.deplacer(Jeu.LARGEUR,Jeu.HAUTEUR)
@@ -82,7 +86,9 @@ class Jeu:
         if self.vaisseau.nb_vies > 0:
             for asteroide in self.asteroides:
                 if asteroide.entrer_en_collision_avec(self.vaisseau):
-                    self.vaisseau.nb_vies -= 1
+                    if self.vaisseau.invincible == 0:
+                        self.vaisseau.nb_vies -= 1
+                        self.vaisseau.invincible = 60
                     if not(asteroide.scission()):
                         self.asteroides.remove(asteroide)
                     #asteroide.exploser(self.fenetre)
@@ -90,7 +96,9 @@ class Jeu:
                     break
             for soucoupe in self.soucoupes:
                 if soucoupe.entrer_en_collision_avec(self.vaisseau):
-                    self.vaisseau.nb_vies -= 1
+                    if self.vaisseau.invincible == 0:
+                        self.vaisseau.nb_vies -= 1
+                        self.vaisseau.invincible = 60
                     afficher(self.fenetre,self.message,self.font)
                     self.soucoupes.remove(soucoupe)
                     break
@@ -129,7 +137,6 @@ class Jeu:
                     self.vaisseau.missile.remove(missile)
                     self.soucoupes.remove(soucoupe)
                     afficher(self.fenetre,self.message,self.font)
-                
 
 
     def _dessiner(self):
@@ -156,6 +163,7 @@ class Jeu:
             for missile in soucoupe.missile:
                 self.fenetre.blit(missile.image1_rot,missile.position)
                 missile.deplacer(Jeu.LARGEUR,Jeu.HAUTEUR)
+                #print(soucoupe.est_trop_proche(self.vaisseau))
 
         #vitesse de rafraîchissement
         self.horloge.tick(60)
