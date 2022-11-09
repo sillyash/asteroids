@@ -55,6 +55,7 @@ class Vaisseau(Animation):
         self.score = 0
         self.missile = []
         self.Nb_missiles = 4   
+        self.Nb_missiles = 4
       
     def accelerer(self):
         self.accelere = True
