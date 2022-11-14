@@ -14,6 +14,8 @@ class Jeu:
         self.fonds_ecran = charger_image('bg2')
         self.vaisseau_off = charger_image('ship_off')
         self.vaisseau_on = charger_image('ship_on')
+        self.vaisseau_shield = charger_image('shield')
+        self.shield_rect = self.vaisseau_shield.get_rect()
         self.asteroide = charger_image('asteroid')
         self.explosion = charger_image('explosion')
         self.missile = charger_image('missile')
@@ -83,10 +85,8 @@ class Jeu:
         #invincibilité
         if self.vaisseau.invincible > 0:
             self.vaisseau.invincible -= 1
-            self.vaisseau.invincible_img()
-        else:
-            self.vaisseau_off = charger_image('ship_off')
-            self.vaisseau_on = charger_image('ship_on')  
+            self.fenetre.blit(self.vaisseau_shield, self.vaisseau.position)
+            home.blit_shield(partie.fenetre)
 
         #déplacements
         self.vaisseau.deplacer(Jeu.LARGEUR,Jeu.HAUTEUR)
@@ -196,7 +196,6 @@ def boucle():
     while True:
         home.blit_home(partie.fenetre)
         pygame.display.update()
-
             
         if home.get_event():
             partie.boucle_jeu()

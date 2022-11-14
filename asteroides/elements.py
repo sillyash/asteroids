@@ -91,7 +91,7 @@ class Vaisseau(Animation):
         self.rectangle = pygame.Rect(self.position.x,self.position.y,
         self.rayon,self.rayon)
 
-       def dessiner(self,fenetre):
+    def dessiner(self,fenetre):
         if self.accelere:
             self.accelere = False
             angle = self.direction.angle_to(Animation.EST)
@@ -190,13 +190,14 @@ class Home:
     def __init__(self,bg) -> None:
         self.bg = bg
         self.titre_font_size = 120
+        self.titre_font_size3 = 20
         self.titre_font_size2 = 60
         self.font_size = 50
         self.font_nom = pygame.font.SysFont("Verdana",self.font_size,0)
         self.invincible_font_size = 15
-        self.font3 = pygame.font.SysFont("Verdana",self.invincible_font_size,0)
         self.font = pygame.font.SysFont("Verdana",self.titre_font_size,0)
         self.font2 = pygame.font.SysFont("Verdana",self.titre_font_size2,0)
+        self.font3 = pygame.font.SysFont("Verdana",self.titre_font_size3,0)
         self.titre = self.font.render("ASTEROIDES",True,"white")
         self.vous_etes = self.font2.render("FELICITATION VOUS ETES DANS LE CLASSEMENT",True,"white")
         self.ecrire_nom = self.font2.render("ENTREZ VOTRE NOM",True,"white")
@@ -215,6 +216,10 @@ class Home:
         screen.blit(self.vous_etes,(50,150))
         screen.blit(self.ecrire_nom,(500,300))
     
+    def blit_shield(self, screen):
+        screen.blit(self.bg,(0,0))
+        screen.blit(self.invincible,(100,500))
+
     def get_event(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
