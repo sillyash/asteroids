@@ -91,11 +91,7 @@ class Vaisseau(Animation):
         self.rectangle = pygame.Rect(self.position.x,self.position.y,
         self.rayon,self.rayon)
 
-    def invincible_img(self):
-        self.vaisseau_off = charger_image('ship_off_invincible')
-        self.vaisseau_on = charger_image('ship_on_invincible')
-
-    def dessiner(self,fenetre):
+       def dessiner(self,fenetre):
         if self.accelere:
             self.accelere = False
             angle = self.direction.angle_to(Animation.EST)
