@@ -64,12 +64,12 @@ class Vaisseau(Animation):
     def accelerer(self):
         self.accelere = True
         self.vitesse += self.qte_acc*self.direction
-        #self.son.play()
+        self.son.play()
+        self.son.fadeout(1000)
 
     def decelerer(self):
         self.accelere = False
         self.vitesse -= self.qte_acc*self.direction
-        self.son.fadeout(1000)
 
     def tourner(self,sens):
         if sens == 1:
