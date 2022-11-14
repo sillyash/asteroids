@@ -1,4 +1,5 @@
 import pygame
+from json import load,dump
 from pygame.math import Vector2
 from pygame.transform import rotozoom
 from math import acos, atan2, degrees, pi
@@ -162,3 +163,83 @@ class Soucoupe(Animation):
         if len(self.missile) < 1:
             self.missile.append(Missile(image_missile,son_tir,self.position,self.vitesse,(other.position-self.position)/80))
             son_tir.play()
+
+
+
+class Home:
+    def __init__(self,bg) -> None:
+        self.bg = bg
+        self.titre_font_size = 120
+        self.titre_font_size2 = 60
+        self.font_size = 60
+        self.font_nom = pygame.font.SysFont("Verdana",self.font_size,0)
+        self.font = pygame.font.SysFont("Verdana",self.titre_font_size,0)
+        self.font2 = pygame.font.SysFont("Verdana",self.titre_font_size2,0)
+        self.titre = self.font.render("ASTEROIDES",True,"white")
+        self.vous_etes = self.font2.render("FELICITATION VOUS ETES DANS LE CLASSEMENT",True,"white")
+        self.ecrire_nom = self.font2.render("ENTREZ VOTRE NOM",True,"white")
+
+    def blit_home(self,screen):
+        screen.blit(self.bg,(0,0))
+        screen.blit(self.titre,(400,100))
+    
+    def blit_nouveau_score(self,screen):
+        screen.blit(self.bg,(0,0))
+        screen.blit(self.vous_etes,(50,150))
+        screen.blit(self.ecrire_nom,(500,300))
+    
+    def get_event(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                quit()
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                return True
+        
+        return False
+
+    def dans_classement(self,score):
+        old_score = load(open("../ressources/best_scores.txt","r"))
+        if score > old_score[-1][1]:
+            return True
+        else:
+            return False
+    
+
+    def nom(self,screen):
+        self.blit_nouveau_score(screen)
+        pygame.display.flip()
+        ecrit = True
+        nom = ""
+        while ecrit:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key ==pygame.K_BACKSPACE:
+                        nom = nom[:-1]
+                    elif event.key == pygame.K_RETURN:
+                        return nom
+                    else:
+                        nom += event.unicode
+            
+
+            self.blit_nouveau_score(screen)
+            screen.blit(self.font_nom.render(nom,True,"white"),((1600/2)-((self.font_size*len(nom))/4),600))
+            pygame.display.flip()
+    
+    def nouveau_classement(self,screen,score):
+        print("test")
+        old_score = load(open("../ressources/best_scores.txt","r"))
+        i = 4
+        trier = False
+
+        while not trier and i > 0:
+            if score > old_score[i-1][1]:
+                i -= 1
+            else:
+                trier = True
+        
+        new_score = old_score[:i]+[[self.nom(screen),score]]+old_score[i:9]
+        fichier = open("../ressources/best_scores.txt","w")
+        dump(new_score,fichier)
+        fichier.close
+    
+

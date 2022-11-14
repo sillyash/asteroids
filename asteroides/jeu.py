@@ -1,12 +1,11 @@
 import pygame
 from utilitaires import charger_image,charger_son,afficher
-from elements import Asteroide,Vaisseau,Soucoupe
+from elements import Asteroide,Vaisseau,Soucoupe,Home
 from random import randint,random
-from time import sleep
 class Jeu:
     #attributs de classe
-    LARGEUR = 800
-    HAUTEUR = 600
+    LARGEUR = 1600
+    HAUTEUR = 1200
     def __init__(self):
         self._init_pygame()
         self.fenetre = pygame.display.set_mode((Jeu.LARGEUR, Jeu.HAUTEUR))
@@ -37,13 +36,16 @@ class Jeu:
         #message
         self.message = "Nb vies:{}  Score:{}".format(self.vaisseau.nb_vies,self.vaisseau.score)
         SOUTIR  = pygame.event.custom_type()
+        
 
-    def boucle_inf(self):
-        while True:
+    def boucle_jeu(self):
+        while self.vaisseau.nb_vies > 0:
             self._capturer_evt()
             self._mettre_a_jour()
             self._dessiner()
-
+    
+    
+    
     def _init_pygame(self):
         pygame.init()
         pygame.display.set_caption("Asteroides")
@@ -85,7 +87,7 @@ class Jeu:
         for soucoupe in self.soucoupes:
             soucoupe.chasser(self.vaisseau)
             soucoupe.deplacer(Jeu.LARGEUR,Jeu.HAUTEUR)
-            soucoupe.tirer_sur(self.missile,self.son_missile,self.vaisseau.direction)
+            soucoupe.tirer_sur(self.missile,self.son_missile,self.vaisseau)
             
         #collision vaisseau - asteroides/soucoupe
         if self.vaisseau.nb_vies > 0:
@@ -174,6 +176,21 @@ class Jeu:
         self.horloge.tick(60)
         pygame.display.update()
 
+def boucle():
+        while True:
+            partie  = Jeu()
+            home = Home(partie.fonds_ecran)
+            home.blit_home(partie.fenetre)
+            pygame.display.update()
+
+            
+            if home.get_event():
+                partie.boucle_jeu()
+                if home.dans_classement(partie.vaisseau.score):
+                    home.nouveau_classement(partie.fenetre,partie.vaisseau.score)
+
+
+
+
 if __name__ == "__main__":
-    partie  = Jeu()
-    partie.boucle_inf()
+    boucle()

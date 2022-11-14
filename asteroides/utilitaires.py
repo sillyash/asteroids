@@ -16,5 +16,5 @@ def charger_son(nom):
 def afficher(fenetre,texte,font,couleur=Color("red")):
     surf = font.render(texte, True, couleur)
     rect = surf.get_rect()
-    rect.center = Vector2(220,30)
+    rect.center = Vector2(300,100)
     fenetre.blit(surf, rect)
