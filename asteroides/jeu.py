@@ -92,9 +92,12 @@ class Jeu:
         for asteroide in self.asteroides:
             asteroide.deplacer(Jeu.LARGEUR,Jeu.HAUTEUR)
         for soucoupe in self.soucoupes:
-            soucoupe.chasser(self.vaisseau)
-            soucoupe.deplacer(Jeu.LARGEUR,Jeu.HAUTEUR)
-            soucoupe.tirer_sur(self.missile,self.son_missile,self.vaisseau)
+            if not soucoupe.est_trop_proche(self.vaisseau):
+                soucoupe.chasser(self.vaisseau)
+                soucoupe.deplacer(Jeu.LARGEUR,Jeu.HAUTEUR)
+            else:
+                soucoupe.tirer_sur(self.missile,self.son_missile,self.vaisseau)
+
             
         #collision vaisseau - asteroides/soucoupe/missiles
         if self.vaisseau.nb_vies > 0:

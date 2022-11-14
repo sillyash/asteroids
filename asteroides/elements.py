@@ -168,14 +168,13 @@ class Soucoupe(Animation):
         super().__init__(image_soucoupe,son_explosion,position,vitesse)
         self.missile = []
         self.direction = Vector2(1,0)
+        self.distance_max = 200
 
     def chasser(self,other):
         self.vitesse = (other.position-self.position)/80
 
-    """def est_trop_proche(self,other):
-        print(self.position.x - other.position.x)
-        print(self.position.y - other.position.y)
-        return (self.position.x - other.position.x) > 100 and (self.position.y - other.position.y) > 100"""
+    def est_trop_proche(self,other):
+        return abs(self.position.x - other.position.x) < self.distance_max and abs(self.position.y - other.position.y) < self.distance_max
 
     def tirer_sur(self,image_missile,son_tir,other):
         if len(self.missile) < 1:
