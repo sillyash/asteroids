@@ -196,11 +196,15 @@ class Home:
         self.titre_font_size2 = 60
         self.font_size = 50
         self.font_nom = pygame.font.SysFont("Verdana",self.font_size,0)
+        self.invincible_font_size = 15
+        self.font3 = pygame.font.SysFont("Verdana",self.invincible_font_size,0)
         self.font = pygame.font.SysFont("Verdana",self.titre_font_size,0)
         self.font2 = pygame.font.SysFont("Verdana",self.titre_font_size2,0)
         self.titre = self.font.render("ASTEROIDES",True,"white")
         self.vous_etes = self.font2.render("FELICITATION VOUS ETES DANS LE CLASSEMENT",True,"white")
         self.ecrire_nom = self.font2.render("ENTREZ VOTRE NOM",True,"white")
+        self.invincible = self.font3.render("INVINCIBLE",True,"blue")
+
 
     def blit_home(self,screen):
         screen.blit(self.bg,(0,0))
@@ -220,7 +224,6 @@ class Home:
                 quit()
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 return True
-        
         return False
 
     def dans_classement(self,score):
