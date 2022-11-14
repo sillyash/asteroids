@@ -81,8 +81,6 @@ class Vaisseau(Animation):
         
         #on fait tourner le vaisseau
         self.tourner(self.rotation)
-
-        #print(self.vitesse.x,self.vitesse.y)
         
         self.position += self.vitesse
         self.position.x = self.position.x % largeur
@@ -113,7 +111,7 @@ class Vaisseau(Animation):
     #on ajoute un missile dans la liste missile du vaisseau
     def tirer(self,image_missile,son_tir):
         if len(self.missile) < self.Nb_missiles:
-            self.missile.append(Missile(image_missile,son_tir,self.position,self.vitesse,self.direction))
+            self.missile.append(Missile(image_missile,son_tir,self.centre,self.vitesse,self.direction))
             son_tir.play()
         
 
