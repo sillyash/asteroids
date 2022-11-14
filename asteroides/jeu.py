@@ -83,8 +83,7 @@ class Jeu:
         #invincibilité
         if self.vaisseau.invincible > 0:
             self.vaisseau.invincible -= 1
-            self.vaisseau_off = charger_image('ship_off')
-            self.vaisseau_on = charger_image('ship_on')
+            self.vaisseau.invincible_img()
         else:
             self.vaisseau_off = charger_image('ship_off')
             self.vaisseau_on = charger_image('ship_on')  

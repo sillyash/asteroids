@@ -60,9 +60,6 @@ class Vaisseau(Animation):
         self.Nb_missiles = 4
         self.rotation = 0
         self.vitesse_max = 15
-
-    def invincible_blit(self):
-        pass
       
     def accelerer(self):
         self.accelere = True
@@ -93,6 +90,10 @@ class Vaisseau(Animation):
         self.centre = self.position + Vector2(self.rayon)
         self.rectangle = pygame.Rect(self.position.x,self.position.y,
         self.rayon,self.rayon)
+
+    def invincible_img(self):
+        self.vaisseau_off = charger_image('ship_off_invincible')
+        self.vaisseau_on = charger_image('ship_on_invincible')
 
     def dessiner(self,fenetre):
         if self.accelere:
