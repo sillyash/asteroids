@@ -14,8 +14,9 @@ class Jeu:
         self.fonds_ecran = charger_image('bg2')
         self.vaisseau_off = charger_image('ship_off')
         self.vaisseau_on = charger_image('ship_on')
-        self.vaisseau_shield = charger_image('shield')
-        self.shield_rect = self.vaisseau_shield.get_rect()
+        self.shield = charger_image('shield')
+        self.vaisseau_off_invincible = charger_image('ship_off_invincible')
+        self.vaisseau_on_invincible = charger_image('ship_on_invincible')
         self.asteroide = charger_image('asteroid')
         self.explosion = charger_image('explosion')
         self.missile = charger_image('missile')
@@ -85,8 +86,6 @@ class Jeu:
         #invincibilité
         if self.vaisseau.invincible > 0:
             self.vaisseau.invincible -= 1
-            self.fenetre.blit(self.vaisseau_shield, self.vaisseau.position)
-            home.blit_shield(partie.fenetre)
 
         #déplacements
         self.vaisseau.deplacer(Jeu.LARGEUR,Jeu.HAUTEUR)
@@ -169,9 +168,10 @@ class Jeu:
         self.message = "Nb vies:{}  Score:{}".\
         format(self.vaisseau.nb_vies,self.vaisseau.score)
         afficher(self.fenetre,self.message,self.font)
-
         if self.vaisseau.nb_vies > 0:
             self.vaisseau.dessiner(self.fenetre)
+            if self.vaisseau.invincible > 0:
+                self.fenetre.blit(self.shield,(self.vaisseau.centre-(24,24)))
             #on affiche les missiles
             for missile in self.vaisseau.missile:
                 self.fenetre.blit(missile.image1_rot,missile.position)
