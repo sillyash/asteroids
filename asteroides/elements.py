@@ -52,12 +52,14 @@ class Vaisseau(Animation):
         self.accelere = False
         self.qte_acc = 2
         self.coeff_friction = 0.1
-        self.delta_angle = 2.5
+        self.delta_angle = 4.5
         self.taille_vaisseau = Vector2(90,90)
         self.score = 0
         self.missile = []
         self.Nb_missiles = 4   
         self.Nb_missiles = 4
+        self.rotation = 0
+        self.vitesse_max = 15
 
     def invincible_blit(self):
         pass
@@ -65,21 +67,42 @@ class Vaisseau(Animation):
     def accelerer(self):
         self.accelere = True
         self.vitesse += self.qte_acc*self.direction
-        self.son.play()
+        #self.son.play()
 
     def decelerer(self):
         self.accelere = False
-        self.vitesse -= self.coeff_friction*self.direction
+        self.vitesse -= self.qte_acc*self.direction
         self.son.fadeout(1000)
 
     def tourner(self,sens):
         if sens == 1:
             self.direction.rotate_ip(self.delta_angle)
-        else:
+        elif sens == -1:
             self.direction.rotate_ip(-self.delta_angle)
+    
+    def deplacer(self,largeur,hauteur):
+        
+        #on fait tourner le vaisseau
+        self.tourner(self.rotation)
+
+        #print(self.vitesse.x,self.vitesse.y)
+        
+        self.position += self.vitesse
+        self.position.x = self.position.x % largeur
+        self.position.y = self.position.y % hauteur
+        self.centre = self.position + Vector2(self.rayon)
+        self.rectangle = pygame.Rect(self.position.x,self.position.y,
+        self.rayon,self.rayon)
 
     def dessiner(self,fenetre):
         if self.accelere:
+            self.accelere = False
+            angle = self.direction.angle_to(Animation.EST)
+            self.rot_image1 = rotozoom(self.image1, angle, 1.0)
+            self.rot_image2 = rotozoom(self.image2, angle, 1.0)
+            taille_rot_vaisseau = Vector2(self.rot_image1.get_size())
+            self.blit_position = self.position - \
+            (taille_rot_vaisseau - self.taille_vaisseau)*0.5
             fenetre.blit(self.rot_image2,self.blit_position)
         else:
             angle = self.direction.angle_to(Animation.EST)
@@ -171,7 +194,7 @@ class Home:
         self.bg = bg
         self.titre_font_size = 120
         self.titre_font_size2 = 60
-        self.font_size = 60
+        self.font_size = 50
         self.font_nom = pygame.font.SysFont("Verdana",self.font_size,0)
         self.font = pygame.font.SysFont("Verdana",self.titre_font_size,0)
         self.font2 = pygame.font.SysFont("Verdana",self.titre_font_size2,0)
@@ -182,6 +205,9 @@ class Home:
     def blit_home(self,screen):
         screen.blit(self.bg,(0,0))
         screen.blit(self.titre,(400,100))
+        scores = load(open("../ressources/best_scores.txt","r"))
+        for i in range(len(scores)):
+            screen.blit(self.font_nom.render(str(i+1) + ") " + scores[i][0]+" : "+str(scores[i][1]),True,"white"),((1500/2)-((25*len(str(i+1) + ") " + scores[i][0]+" : "+str(scores[i][1])))/4),300+55*i))
     
     def blit_nouveau_score(self,screen):
         screen.blit(self.bg,(0,0))
@@ -226,7 +252,6 @@ class Home:
             pygame.display.flip()
     
     def nouveau_classement(self,screen,score):
-        print("test")
         old_score = load(open("../ressources/best_scores.txt","r"))
         i = 4
         trier = False

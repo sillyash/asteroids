@@ -54,18 +54,27 @@ class Jeu:
         for event in pygame.event.get():
             if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 quit()
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
-                self.vaisseau.accelerer()
-            elif event.type == pygame.KEYUP and event.key == pygame.K_UP:
-                self.vaisseau.decelerer()
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.vaisseau.tirer(self.missile,self.son_missile)
-        dict_touches_pressees = pygame.key.get_pressed()
-        if dict_touches_pressees[pygame.K_RIGHT]:
-            self.vaisseau.tourner(1)
-        elif dict_touches_pressees[pygame.K_LEFT]:
-            self.vaisseau.tourner(-1)
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
+                self.vaisseau.accelerer()
+            elif (event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT) or (event.type == pygame.KEYUP and event.key == pygame.K_RIGHT):
+                self.vaisseau.rotation -= 1
+            elif (event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT) or (event.type == pygame.KEYUP and event.key == pygame.K_LEFT):
+                self.vaisseau.rotation += 1
 
+    def reset(self):
+        #Liste d'astéroides
+        self.asteroides = [Asteroide(self.asteroide,self.son_explosion,(randint(0,Jeu.LARGEUR//3),randint(0,Jeu.HAUTEUR//3)),(0.5,0.5),3),\
+        Asteroide(self.asteroide,self.son_explosion,(randint(2*Jeu.LARGEUR//3,Jeu.LARGEUR),randint(2*Jeu.HAUTEUR//3,Jeu.HAUTEUR)),(-0.5,-0.5),3)]
+        #soucoupes
+        self.soucoupes = [Soucoupe(self.soucoupe,self.son_explosion,(randint(0,Jeu.LARGEUR),randint(0,Jeu.HAUTEUR)),0)]
+        #le vaisseau
+        self.vaisseau =  Vaisseau(self.vaisseau_off,self.son_acc,(Jeu.LARGEUR//2,Jeu.HAUTEUR//2),self.vaisseau_on)
+        #message
+        self.message = "Nb vies:{}  Score:{}".format(self.vaisseau.nb_vies,self.vaisseau.score)
+    
+    
     def _mettre_a_jour(self):
         #apparition d'astéroides
         if len(self.asteroides) < 3:
@@ -177,20 +186,21 @@ class Jeu:
         pygame.display.update()
 
 def boucle():
-        while True:
-            partie  = Jeu()
-            home = Home(partie.fonds_ecran)
-            home.blit_home(partie.fenetre)
-            pygame.display.update()
+    while True:
+        home.blit_home(partie.fenetre)
+        pygame.display.update()
 
             
-            if home.get_event():
-                partie.boucle_jeu()
-                if home.dans_classement(partie.vaisseau.score):
-                    home.nouveau_classement(partie.fenetre,partie.vaisseau.score)
+        if home.get_event():
+            partie.boucle_jeu()
+            if home.dans_classement(partie.vaisseau.score):
+                home.nouveau_classement(partie.fenetre,partie.vaisseau.score)
+            partie.reset()
 
 
 
 
 if __name__ == "__main__":
+    partie  = Jeu()
+    home = Home(partie.fonds_ecran)
     boucle()
