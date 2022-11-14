@@ -184,7 +184,7 @@ class Soucoupe(Animation):
 
     def tirer_sur(self,image_missile,son_tir,other):
         if len(self.missile) < 1:
-            self.missile.append(Missile(image_missile,son_tir,self.position,self.vitesse,(other.position-self.position)/80))
+            self.missile.append(Missile(image_missile,son_tir,self.position,self.vitesse,(other.position-self.position)/150))
             son_tir.play()
 
 

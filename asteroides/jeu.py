@@ -98,7 +98,7 @@ class Jeu:
             soucoupe.deplacer(Jeu.LARGEUR,Jeu.HAUTEUR)
             soucoupe.tirer_sur(self.missile,self.son_missile,self.vaisseau)
             
-        #collision vaisseau - asteroides/soucoupe
+        #collision vaisseau - asteroides/soucoupe/missiles
         if self.vaisseau.nb_vies > 0:
             for asteroide in self.asteroides:
                 if asteroide.entrer_en_collision_avec(self.vaisseau):
@@ -117,6 +117,14 @@ class Jeu:
                         self.vaisseau.invincible = 60
                     afficher(self.fenetre,self.message,self.font)
                     self.soucoupes.remove(soucoupe)
+                    break
+                else:
+                    for missile in soucoupe.missile:
+                        if missile.entrer_en_collision_avec(self.vaisseau):
+                            if self.vaisseau.invincible == 0:
+                                self.vaisseau.nb_vies -= 1
+                                self.vaisseau.invincible = 60
+                        afficher(self.fenetre,self.message,self.font)
                     break
 
         #collision missile - bord
