@@ -11,7 +11,6 @@ Un jeu d'aracde indémodable, reproduit et revisité en Python à l'aide du modu
 
 Le vaisseau a 5 vies. Quand il en perd une, il devient invincible pendant 1 seconde.
 Vous devez tirer sur les atéroides à l'aide de la touche *ESPACE*, et vous diriger avec les *FLECHES DIRECTIONELLES*.
-Une soucoupe essaiera de vous tuer au début de la partie.
 Il y a un cooldown sur les missiles: visez bien!
 
 ## Ce qu'on a a fait
