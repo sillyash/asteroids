@@ -188,7 +188,7 @@ class Home:
         self.bg = bg
         self.titre_font_size = 80
         self.titre_font_size3 = 40
-        self.titre_font_size2 = 38
+        self.titre_font_size2 = 36
         self.font_size = 20
         self.font_nom = pygame.font.Font("../ressources/font/Pixel.ttf",self.font_size)
         self.font = pygame.font.Font("../ressources/font/Pixel.ttf",self.titre_font_size)
