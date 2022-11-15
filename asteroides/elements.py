@@ -186,19 +186,17 @@ class Soucoupe(Animation):
 class Home:
     def __init__(self,bg) -> None:
         self.bg = bg
-        self.titre_font_size = 120
-        self.titre_font_size3 = 20
-        self.titre_font_size2 = 60
-        self.font_size = 50
-        self.font_nom = pygame.font.SysFont("Verdana",self.font_size,0)
-        self.invincible_font_size = 15
-        self.font = pygame.font.SysFont("Verdana",self.titre_font_size,0)
-        self.font2 = pygame.font.SysFont("Verdana",self.titre_font_size2,0)
-        self.font3 = pygame.font.SysFont("Verdana",self.titre_font_size3,0)
+        self.titre_font_size = 80
+        self.titre_font_size3 = 40
+        self.titre_font_size2 = 38
+        self.font_size = 20
+        self.font_nom = pygame.font.Font("../ressources/font/Pixel.ttf",self.font_size)
+        self.font = pygame.font.Font("../ressources/font/Pixel.ttf",self.titre_font_size)
+        self.font2 = pygame.font.Font("../ressources/font/Pixel.ttf",self.titre_font_size2)
+        self.font3 = pygame.font.Font("../ressources/font/Pixel.ttf",self.titre_font_size3)
         self.titre = self.font.render("ASTEROIDES",True,"white")
         self.vous_etes = self.font2.render("FELICITATION VOUS ETES DANS LE CLASSEMENT",True,"white")
         self.ecrire_nom = self.font2.render("ENTREZ VOTRE NOM",True,"white")
-        self.invincible = self.font3.render("INVINCIBLE",True,"blue")
 
 
     def blit_home(self,screen):

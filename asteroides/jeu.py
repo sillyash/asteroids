@@ -28,17 +28,18 @@ class Jeu:
         #horloge pour le rafraîchissement de l'image
         self.horloge = pygame.time.Clock()
         #font
-        self.font = pygame.font.Font(None,64)
+        self.font = pygame.font.Font("../ressources/font/Pixel.ttf",24)
         #Liste d'astéroides
         self.asteroides = [Asteroide(self.asteroide,self.son_explosion,(randint(0,Jeu.LARGEUR//3),randint(0,Jeu.HAUTEUR//3)),(0.5,0.5),3),\
         Asteroide(self.asteroide,self.son_explosion,(randint(2*Jeu.LARGEUR//3,Jeu.LARGEUR),randint(2*Jeu.HAUTEUR//3,Jeu.HAUTEUR)),(-0.5,-0.5),3)]
         #soucoupes
         self.soucoupes = []
+        self.temps_avant_soucoupe = randint(60*10,60*20)
         #le vaisseau
         self.vaisseau =  Vaisseau(self.vaisseau_off,self.son_acc,(Jeu.LARGEUR//2,Jeu.HAUTEUR//2),self.vaisseau_on)
         #message
         self.message = "Nb vies:{}  Score:{}".format(self.vaisseau.nb_vies,self.vaisseau.score)
-        self.temps_avant_soucoupe = randint(60*10,60*20)
+
     def boucle_jeu(self):
         while self.vaisseau.nb_vies > 0:
             self._capturer_evt()
@@ -69,7 +70,8 @@ class Jeu:
         self.asteroides = [Asteroide(self.asteroide,self.son_explosion,(randint(0,Jeu.LARGEUR//3),randint(0,Jeu.HAUTEUR//3)),(0.5,0.5),3),\
         Asteroide(self.asteroide,self.son_explosion,(randint(2*Jeu.LARGEUR//3,Jeu.LARGEUR),randint(2*Jeu.HAUTEUR//3,Jeu.HAUTEUR)),(-0.5,-0.5),3)]
         #soucoupes
-        self.soucoupes = [Soucoupe(self.soucoupe,self.son_explosion,(randint(0,Jeu.LARGEUR),randint(0,Jeu.HAUTEUR)),0)]
+        self.soucoupes = []
+        self.temps_avant_soucoupe = randint(60*10,60*20)
         #le vaisseau
         self.vaisseau =  Vaisseau(self.vaisseau_off,self.son_acc,(Jeu.LARGEUR//2,Jeu.HAUTEUR//2),self.vaisseau_on)
         #message
@@ -78,7 +80,7 @@ class Jeu:
     
     def _mettre_a_jour(self):
         #apparition d'astéroides/soucoupes
-        if len(self.asteroides) < 5:
+        if len(self.asteroides) < 7:
             self.asteroides.append(Asteroide(self.asteroide,self.son_explosion,(randint(0,Jeu.LARGEUR),0),(random(),random()),3))
         
         if len(self.soucoupes) < 1:
@@ -172,13 +174,10 @@ class Jeu:
         #effacer
         self.fenetre.blit(self.fonds_ecran, (0, 0))
         #redessiner
-        self.message = "Nb vies:{}  Score:{}".\
-        format(self.vaisseau.nb_vies,self.vaisseau.score)
-        afficher(self.fenetre,self.message,self.font)
         if self.vaisseau.nb_vies > 0:
             self.vaisseau.dessiner(self.fenetre)
             if self.vaisseau.invincible > 0:
-                self.fenetre.blit(self.shield,(self.vaisseau.centre-(24,24)))
+                self.fenetre.blit(self.shield,(self.vaisseau.centre-(34,34)))
             #on affiche les missiles
             for missile in self.vaisseau.missile:
                 self.fenetre.blit(missile.image1_rot,missile.position)
@@ -193,8 +192,10 @@ class Jeu:
             for missile in soucoupe.missile:
                 self.fenetre.blit(missile.image1_rot,missile.position)
                 missile.deplacer(Jeu.LARGEUR,Jeu.HAUTEUR)
-                #print(soucoupe.est_trop_proche(self.vaisseau))
 
+        self.message = "Nb vies:{}  Score:{}".\
+        format(self.vaisseau.nb_vies,self.vaisseau.score)
+        afficher(self.fenetre,self.message,self.font,"white")
         #vitesse de rafraîchissement
         self.horloge.tick(60)
         pygame.display.update()
