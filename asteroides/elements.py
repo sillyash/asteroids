@@ -46,7 +46,7 @@ class Vaisseau(Animation):
     def __init__(self,vaisseau_off,son_acc,position,vaisseau_on):
         super().__init__(vaisseau_off,son_acc,position,(0,0),vaisseau_on)
         #Nombre de vies
-        self.invincible = 60
+        self.invincible = 0
         self.nb_vies = 5
         self.direction = Vector2(1,0)
         self.accelere = False

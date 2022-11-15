@@ -14,9 +14,7 @@ class Jeu:
         self.fonds_ecran = charger_image('bg2')
         self.vaisseau_off = charger_image('ship_off')
         self.vaisseau_on = charger_image('ship_on')
-        self.shield = charger_image('shield')
-        self.vaisseau_off_invincible = charger_image('ship_off_invincible')
-        self.vaisseau_on_invincible = charger_image('ship_on_invincible')
+        self.shield = [charger_image('shield0'),charger_image('shield'),charger_image('shield2')]
         self.asteroide = charger_image('asteroid')
         self.explosion = charger_image('explosion')
         self.missile = charger_image('missile')
@@ -27,6 +25,8 @@ class Jeu:
         self.son_missile = charger_son("son_missile.wav")
         #horloge pour le rafraîchissement de l'image
         self.horloge = pygame.time.Clock()
+        #indexe pour l'animation  du bouclier
+        self.shield_index = 0
         #font
         self.font = pygame.font.Font("../ressources/font/Pixel.ttf",24)
         #Liste d'astéroides
@@ -176,8 +176,13 @@ class Jeu:
         #redessiner
         if self.vaisseau.nb_vies > 0:
             self.vaisseau.dessiner(self.fenetre)
-            if self.vaisseau.invincible > 0:
-                self.fenetre.blit(self.shield,(self.vaisseau.centre-(34,34)))
+            #bouclier
+            if self.vaisseau.invincible > 0 and pygame.time.get_ticks() % 2 == 0:
+                if self.shield_index > len(self.shield)-1:
+                    self.shield_index = 0
+                else:
+                    self.fenetre.blit(self.shield[self.shield_index],(self.vaisseau.centre-(34,34)))
+                    self.shield_index += 1
             #on affiche les missiles
             for missile in self.vaisseau.missile:
                 self.fenetre.blit(missile.image1_rot,missile.position)
