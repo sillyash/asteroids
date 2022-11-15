@@ -33,14 +33,12 @@ class Jeu:
         self.asteroides = [Asteroide(self.asteroide,self.son_explosion,(randint(0,Jeu.LARGEUR//3),randint(0,Jeu.HAUTEUR//3)),(0.5,0.5),3),\
         Asteroide(self.asteroide,self.son_explosion,(randint(2*Jeu.LARGEUR//3,Jeu.LARGEUR),randint(2*Jeu.HAUTEUR//3,Jeu.HAUTEUR)),(-0.5,-0.5),3)]
         #soucoupes
-        self.soucoupes = [Soucoupe(self.soucoupe,self.son_explosion,(randint(0,Jeu.LARGEUR),randint(0,Jeu.HAUTEUR)),0)]
+        self.soucoupes = []
         #le vaisseau
         self.vaisseau =  Vaisseau(self.vaisseau_off,self.son_acc,(Jeu.LARGEUR//2,Jeu.HAUTEUR//2),self.vaisseau_on)
         #message
         self.message = "Nb vies:{}  Score:{}".format(self.vaisseau.nb_vies,self.vaisseau.score)
-        SOUTIR  = pygame.event.custom_type()
-        
-
+        self.temps_avant_soucoupe = randint(60*10,60*20)
     def boucle_jeu(self):
         while self.vaisseau.nb_vies > 0:
             self._capturer_evt()
@@ -61,11 +59,11 @@ class Jeu:
                 self.vaisseau.tirer(self.missile,self.son_missile)
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
                 self.vaisseau.accelerer()
-            elif (event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT) or (event.type == pygame.KEYUP and event.key == pygame.K_RIGHT):
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT or event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
                 self.vaisseau.rotation -= 1
-            elif (event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT) or (event.type == pygame.KEYUP and event.key == pygame.K_LEFT):
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT or event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
                 self.vaisseau.rotation += 1
-
+            
     def reset(self):
         #Liste d'astéroides
         self.asteroides = [Asteroide(self.asteroide,self.son_explosion,(randint(0,Jeu.LARGEUR//3),randint(0,Jeu.HAUTEUR//3)),(0.5,0.5),3),\
@@ -79,10 +77,16 @@ class Jeu:
     
     
     def _mettre_a_jour(self):
-        #apparition d'astéroides
-        if len(self.asteroides) < 3:
+        #apparition d'astéroides/soucoupes
+        if len(self.asteroides) < 5:
             self.asteroides.append(Asteroide(self.asteroide,self.son_explosion,(randint(0,Jeu.LARGEUR),0),(random(),random()),3))
         
+        if len(self.soucoupes) < 1:
+            self.temps_avant_soucoupe -= 1
+            if self.temps_avant_soucoupe < 0:
+                self.soucoupes.append(Soucoupe(self.soucoupe,self.son_explosion,(randint(0,Jeu.LARGEUR),randint(0,Jeu.HAUTEUR)),0))
+                self.temps_avant_soucoupe = randint(60*10,60*120)
+
         #invincibilité
         if self.vaisseau.invincible > 0:
             self.vaisseau.invincible -= 1
