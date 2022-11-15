@@ -144,7 +144,7 @@ class Missile(Animation):
         self.direction = direction
         self.taille_missile = Vector2(20,20)
         self.angle = self.direction.angle_to(Animation.EST)
-        self.vitesse = Vector2(self.direction)*7
+        self.vitesse = Vector2(self.direction)*9
         self.image1 = image1
         self.qte_acc = 2
         self.image1_rot = rotozoom(self.image1,self.angle,0.3)
