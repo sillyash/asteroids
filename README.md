@@ -1,5 +1,5 @@
 # Asteroids
-### Alain S, Benjamin C, Swann M, Léo N
+### Alain S, Benjamin C, Ashley M, Léo N
 
 Un jeu d'arcade indémodable, reproduit et revisité en Python à l'aide du module PyGame.
 
