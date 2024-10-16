@@ -9,6 +9,8 @@ Un jeu d'arcade indémodable, reproduit et revisité en Python à l'aide du modu
 
 ## Les règles / le Gameplay
 
+Pour lancer la partie, appuyez sur espace.
+
 Le vaisseau a 5 vies. Quand il en perd une, il devient invincible pendant 1 seconde.
 Vous devez tirer sur les atéroides à l'aide de la touche *ESPACE*, et vous diriger avec les *FLECHES DIRECTIONELLES*.
 Des astéroides et des soucoupes apparaissent de façon aléatoire. Tirez dessus!
